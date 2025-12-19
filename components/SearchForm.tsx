@@ -73,6 +73,20 @@ export default function SearchForm({
           </select>
         </div>
 
+        {/* Date of Birth */}
+        <div>
+          <label className="block text-sm font-semibold text-gray-700 mb-2">
+            জন্ম তারিখ
+          </label>
+          <input
+            type="text"
+            value={filters.dateOfBirth}
+            onChange={(e) => handleChange('dateOfBirth', e.target.value)}
+            placeholder="০১/০৬/১৯৬২"
+            className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-green-600"
+          />
+        </div>
+
         {/* Name */}
         <div>
           <label className="block text-sm font-semibold text-gray-700 mb-2">
@@ -111,20 +125,6 @@ export default function SearchForm({
             value={filters.motherName}
             onChange={(e) => handleChange('motherName', e.target.value)}
             placeholder="মাতার নাম লিখুন"
-            className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-green-600"
-          />
-        </div>
-
-        {/* Date of Birth */}
-        <div>
-          <label className="block text-sm font-semibold text-gray-700 mb-2">
-            জন্ম তারিখ
-          </label>
-          <input
-            type="text"
-            value={filters.dateOfBirth}
-            onChange={(e) => handleChange('dateOfBirth', e.target.value)}
-            placeholder="০১/০৬/১৯৬২"
             className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-green-600"
           />
         </div>

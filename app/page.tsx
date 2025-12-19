@@ -13,95 +13,74 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(false);
   const [searchPerformed, setSearchPerformed] = useState(false);
 
-  const handleSearch = (filters: SearchFilters) => {
-    setIsLoading(true);
-    setSearchPerformed(false);
+const handleSearch = (filters: SearchFilters) => {
+  setIsLoading(true);
+  setSearchPerformed(false);
 
-    setTimeout(() => {
-      let filteredVoters = [...votersData.voters];
+  setTimeout(() => {
+    let voters = [...votersData.voters];
 
-      if (filters.unionParishad && filters.unionParishad !== votersData.metadata.union_parishad) {
-        filteredVoters = [];
+    // 🔴 Union Parishad filter
+    if (
+      filters.unionParishad &&
+      filters.unionParishad !== votersData.metadata.union_parishad
+    ) {
+      voters = [];
+    }
+
+    // 🔴 Exact DOB
+    if (filters.dateOfBirth) {
+      voters = voters.filter(
+        v => v.date_of_birth === filters.dateOfBirth
+      );
+    }
+
+    if (voters.length) {
+      const fuse = new Fuse(voters, {
+        keys: [
+          { name: 'name', weight: 0.4 },
+          { name: 'father_name', weight: 0.2 },
+          { name: 'mother_name', weight: 0.2 },
+          { name: 'address', weight: 0.2 },
+        ],
+        threshold: 0.35,
+        ignoreLocation: true,
+        minMatchCharLength: 2,
+        includeScore: true,
+        useExtendedSearch: true,
+      });
+
+      const extendedQuery: any = {};
+
+      // ✅ Field-isolated matching
+      if (filters.name) {
+        extendedQuery.name = filters.name;
+      }
+      if (filters.fatherName) {
+        extendedQuery.father_name = filters.fatherName;
+      }
+      if (filters.motherName) {
+        extendedQuery.mother_name = filters.motherName;
+      }
+      if (filters.address) {
+        extendedQuery.address = filters.address;
       }
 
-      // ✅ EXACT date of birth match (like name exact)
-      if (filters.dateOfBirth) {
-        console.log('Filtering by exact date of birth:', filters.dateOfBirth);
-        filteredVoters = filteredVoters.filter(
-          v => v.date_of_birth === filters.dateOfBirth
-        );
+      if (Object.keys(extendedQuery).length) {
+        voters = fuse
+          .search({ $and: [extendedQuery] })
+          .sort((a, b) => (a.score ?? 0) - (b.score ?? 0))
+          .map(r => r.item);
       }
+    }
 
-console.log('Filtered voters after exact DOB match:', filteredVoters);
-      const hasTextFilters = filters.name || filters.fatherName || filters.motherName || filters.address;
+    setResults(voters);
+    setSearchPerformed(true);
+    setIsLoading(false);
+  }, 400);
+};
 
-      if (hasTextFilters && filteredVoters.length > 0) {
-        const fuseOptions = {
-          keys: [
-            { name: 'name', weight: 2 },
-            { name: 'father_name', weight: 1.5 },
-            { name: 'mother_name', weight: 1.5 },
-            { name: 'address', weight: 1 },
-          ],
-          threshold: 0.4,
-          ignoreLocation: true,
-          useExtendedSearch: true,
-          minMatchCharLength: 2,
-        };
 
-        const fuse = new Fuse(filteredVoters, fuseOptions);
-        const searchResults: Voter[] = [];
-
-        if (filters.name) {
-          const nameResults = fuse.search(filters.name);
-          nameResults.forEach((result) => {
-            if (!searchResults.find((v) => v.voter_no === result.item.voter_no)) {
-              searchResults.push(result.item);
-            }
-          });
-        }
-
-        if (filters.fatherName) {
-          const fatherResults = fuse.search({
-            $or: [{ father_name: filters.fatherName }],
-          });
-          fatherResults.forEach((result) => {
-            if (!searchResults.find((v) => v.voter_no === result.item.voter_no)) {
-              searchResults.push(result.item);
-            }
-          });
-        }
-
-        if (filters.motherName) {
-          const motherResults = fuse.search({
-            $or: [{ mother_name: filters.motherName }],
-          });
-          motherResults.forEach((result) => {
-            if (!searchResults.find((v) => v.voter_no === result.item.voter_no)) {
-              searchResults.push(result.item);
-            }
-          });
-        }
-
-        if (filters.address) {
-          const addressResults = fuse.search({
-            $or: [{ address: filters.address }],
-          });
-          addressResults.forEach((result) => {
-            if (!searchResults.find((v) => v.voter_no === result.item.voter_no)) {
-              searchResults.push(result.item);
-            }
-          });
-        }
-
-        filteredVoters = searchResults;
-      }
-
-      setResults(filteredVoters);
-      setSearchPerformed(true);
-      setIsLoading(false);
-    }, 500);
-  };
 
   const handleClear = () => {
     setResults([]);

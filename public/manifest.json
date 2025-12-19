@@ -1,0 +1,21 @@
+{
+  "name": "ভোটার তথ্য অনুসন্ধান",
+  "short_name": "ভোটার তথ্য",
+  "description": "দ্রুত এবং সহজে ভোটার তথ্য খুঁজে বের করুন",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#16a34a",
+  "icons": [
+    {
+      "src": "/logo.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/logo.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

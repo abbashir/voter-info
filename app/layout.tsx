@@ -1,6 +1,7 @@
 import './globals.css';
 import type { Metadata } from 'next';
 import { Noto_Serif_Bengali } from 'next/font/google';
+import Head from 'next/head';
 
 const notoSerifBengali = Noto_Serif_Bengali({
   subsets: ['bengali', 'latin'],
@@ -35,6 +36,15 @@ export default function RootLayout({
 }) {
   return (
     <html lang="bn">
+      <Head>
+        {/* PWA manifest */}
+        <link rel="manifest" href="/manifest.json" />
+        <meta name="theme-color" content="#16a34a" />
+        <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
+
+        {/* Optional: offline fallback page */}
+        {/* <link rel="offline-page" href="/offline.html" /> */}
+      </Head>
       <body className={notoSerifBengali.className}>{children}</body>
     </html>
   );

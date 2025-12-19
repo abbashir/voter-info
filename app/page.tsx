@@ -90,43 +90,26 @@ const handleSearch = (filters: SearchFilters) => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-green-50">
       <header className="bg-gradient-to-r from-green-700 to-green-800 text-white shadow-lg">
-        <div className="container mx-auto px-4 py-8">
-          <div className="flex items-center justify-center gap-4 mb-4">
-            <div className="bg-white/10 p-3 rounded-full backdrop-blur-sm">
-              <Vote size={40} />
+        <div className="container mx-auto px-4 py-4">
+          <div className="flex items-center justify-center gap-4">
+            <div className="bg-white/10 p-1 rounded-full backdrop-blur-sm">
+              <img
+                src="/logo.png"
+                alt="ভোটার তথ্য সেবা"
+                className="h-[40px] w-[40px] object-contain"
+              />
             </div>
             <div className="text-center">
-              <h1 className="text-3xl md:text-4xl font-bold mb-2">ভোটার তথ্য অনুসন্ধান</h1>
-              <p className="text-green-100 text-sm md:text-base">
-                দ্রুত এবং সহজে ভোটার তথ্য খুঁজে বের করুন
+              <h1 className="text-2xl md:text-4xl font-bold mb-2">ভোটার তথ্য অনুসন্ধান</h1>
+              <p className="text-green-100 text-sm md:text-base ">
+                মোঃ নুরুল ইসলাম বুলবুল - চাঁপাইনবাবগঞ্জ সদর - ৩
               </p>
-            </div>
-          </div>
-
-          <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 mt-6 max-w-2xl mx-auto">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center text-sm">
-              <div>
-                <p className="text-green-100 mb-1">জেলা</p>
-                <p className="font-bold">{votersData.metadata.district}</p>
-              </div>
-              <div>
-                <p className="text-green-100 mb-1">উপজেলা</p>
-                <p className="font-bold">{votersData.metadata.upazila}</p>
-              </div>
-              <div>
-                <p className="text-green-100 mb-1">ইউনিয়ন</p>
-                <p className="font-bold">{votersData.metadata.union_parishad}</p>
-              </div>
-              <div>
-                <p className="text-green-100 mb-1">ওয়ার্ড</p>
-                <p className="font-bold">{votersData.metadata.ward_number}</p>
-              </div>
             </div>
           </div>
         </div>
       </header>
 
-      <main className="container mx-auto px-4 py-12">
+      <main className="container mx-auto px-4 py-6">
         <div className="mb-8">
           <SearchForm onSearch={handleSearch} onClear={handleClear} isLoading={isLoading} />
         </div>
@@ -139,7 +122,7 @@ const handleSearch = (filters: SearchFilters) => {
           <div className="text-center">
             <p className="text-sm md:text-base">© ২০২৫ ভোটার তথ্য অনুসন্ধান সেবা। সর্বস্বত্ব সংরক্ষিত।</p>
             <p className="text-xs text-gray-400 mt-2">
-              মোট ভোটার: {votersData.metadata.total_voters} | মহিলা ভোটার: {votersData.metadata.total_female_voters}
+              মিডিয়া বিভাগ, বাংলাদেশ জামায়াতে ইসলামী ৬ নং রানীহাটি ইউনিয়ন।
             </p>
           </div>
         </div>

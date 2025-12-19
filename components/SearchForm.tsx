@@ -42,9 +42,23 @@ export default function SearchForm({
   });
 
   const [dobError, setDobError] = useState('');
+  const [formError, setFormError] = useState('');
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+
+    // 2️⃣ At least one field check
+  const hasInput = 
+    filters.name.trim() ||
+    filters.fatherName.trim() ||
+    filters.motherName.trim() ||
+    filters.dateOfBirth.trim() ||
+    filters.address.trim();
+
+  if (!hasInput) {
+    setFormError('কমপক্ষে একটি ফিল্ড পূরণ করতে হবে');
+    return;
+  }
 
     // 🔴 DOB validation
     if (filters.dateOfBirth && !isValidBanglaDate(filters.dateOfBirth)) {
@@ -53,6 +67,7 @@ export default function SearchForm({
     }
 
     setDobError('');
+    setFormError('');
     onSearch(filters);
   };
 
@@ -66,6 +81,7 @@ export default function SearchForm({
       address: '',
     });
     setDobError('');
+    setFormError('');
     onClear();
   };
 
@@ -176,6 +192,11 @@ export default function SearchForm({
 
       {/* Actions */}
       <div className="flex flex-col sm:flex-row gap-4 mt-8">
+        {formError && (
+          <p className="text-red-600 text-sm mt-2 text-center">
+            {formError}
+          </p>
+        )}
         <button
           type="submit"
           disabled={isLoading}

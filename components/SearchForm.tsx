@@ -18,13 +18,22 @@ export interface SearchFilters {
   address: string;
 }
 
+// ✅ Bangla DOB validator
+const isValidBanglaDate = (date: string) => {
+  // Format: ২৩/০৫/২০০৭
+  const regex =
+    /^(০[১-৯]|[১২][০-৯]|৩০|৩১)\/(০[১-৯]|১[০-২])\/([১২][০-৯]{3})$/;
+
+  return regex.test(date);
+};
+
 export default function SearchForm({
   onSearch,
   onClear,
   isLoading,
 }: SearchFormProps) {
   const [filters, setFilters] = useState<SearchFilters>({
-    unionParishad: 'রাণীহাটি', // always selected
+    unionParishad: 'রাণীহাটি',
     name: '',
     fatherName: '',
     motherName: '',
@@ -32,8 +41,18 @@ export default function SearchForm({
     address: '',
   });
 
+  const [dobError, setDobError] = useState('');
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+
+    // 🔴 DOB validation
+    if (filters.dateOfBirth && !isValidBanglaDate(filters.dateOfBirth)) {
+      setDobError('জন্ম তারিখের ফরম্যাট সঠিক নয় (উদাহরণ: ২৩/০৫/২০০৭)');
+      return;
+    }
+
+    setDobError('');
     onSearch(filters);
   };
 
@@ -46,11 +65,17 @@ export default function SearchForm({
       dateOfBirth: '',
       address: '',
     });
+    setDobError('');
     onClear();
   };
 
   const handleChange = (field: keyof SearchFilters, value: string) => {
     setFilters((prev) => ({ ...prev, [field]: value }));
+
+    // Clear error while typing DOB
+    if (field === 'dateOfBirth') {
+      setDobError('');
+    }
   };
 
   return (
@@ -82,9 +107,14 @@ export default function SearchForm({
             type="text"
             value={filters.dateOfBirth}
             onChange={(e) => handleChange('dateOfBirth', e.target.value)}
-            placeholder="০১/০৬/১৯৬২"
-            className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-green-600"
+            placeholder="২৩/০৫/২০০৭"
+            className={`w-full px-4 py-3 border-2 rounded-lg focus:ring-2 focus:ring-green-600 ${
+              dobError ? 'border-red-500' : 'border-gray-300'
+            }`}
           />
+          {dobError && (
+            <p className="text-red-600 text-sm mt-1">{dobError}</p>
+          )}
         </div>
 
         {/* Name */}

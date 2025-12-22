@@ -12,6 +12,7 @@ const notoSerifBengali = Noto_Serif_Bengali({
 export const metadata: Metadata = {
   title: 'ভোটার তথ্য অনুসন্ধান | Voter Information Finder',
   description: 'বাংলাদেশের ভোটার তথ্য দ্রুত এবং সহজে খুঁজে বের করুন। Search voter information in Bangladesh quickly and easily.',
+  manifest: '/manifest.json',
   openGraph: {
     images: [
       {
